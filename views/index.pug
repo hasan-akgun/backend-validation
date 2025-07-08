@@ -7,7 +7,7 @@ div.d-flex.justify-content-center.bg-info.py-5.my-0
     h2.nameHeader Name
     input#nameInput.form-control(type="text", title ="name")
     h2.AgeHeader Age 
-    input#AgeInput.form-control(type="text", title="age")
+    input#ageInput.form-control(type="text", title="age")
     h2.mailHeader Mail
     input#mailInput.form-control(type="text", title ="mail")
     h2.commentHeader Comment
@@ -17,3 +17,62 @@ div.d-flex.justify-content-center.bg-info.py-5.my-0
       label(for="checkInput") I agree terms
     button#sendButton.btn.btn-primary(type="button") SEND
 h3#message.text-center.invisible Message sent
+
+script.
+  let name;
+  document.getElementById('nameInput').addEventListener('input', function(e) {
+    name = e.target.value;
+  });
+
+  let age;
+  document.getElementById('ageInput').addEventListener('input', function(e) {
+    age = e.target.value;
+  });
+
+  let mail;
+  document.getElementById('mailInput').addEventListener('input', function(e) {
+    mail = e.target.value;
+  });
+
+  let comment;
+  document.getElementById('commentInput').addEventListener('input', function(e) {
+    comment = e.target.value;
+  });
+
+  let checked;
+  document.getElementById('checkInput').addEventListener('change', function() {
+    if (this.checked) {
+      checked = true
+    } 
+    else {
+      checked = false
+    }
+    console.log(checked);
+  });
+
+  document.getElementById('sendButton').addEventListener('click', async ()=>{
+    try{
+      const response = await fetch('http://localhost:3000/api/validate',{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: name,
+          age: age,
+          mail: mail,
+          checked: checked,
+          comment: comment
+        })
+      })
+
+      const result = await response.json();
+        
+      document.getElementById('message').innerText = result.message       
+      document.getElementById('message').classList.remove('invisible');
+      
+    }catch(error){
+      console.log(error);
+    }
+  });
+

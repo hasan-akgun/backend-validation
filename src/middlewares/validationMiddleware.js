@@ -38,7 +38,9 @@ const validateMail = (req, res, next) =>{
 
 const validateAge = (req, res, next) =>{
   const {age} = req.body;
-  if(!(typeof age === "number" && age % 1 === 0)){
+
+  const ageRegex = /^[0-9]+$/;
+  if(!ageRegex.test(age)){
     res.status(400).json({
       success: false,
       message: "Please enter a valid age"
@@ -63,7 +65,7 @@ const validateCheckBox = (req, res, next) =>{
   next();
 }
 
-const validateComment = (req, res, next) =>{
+const validateComment = (req, res) =>{
   const {comment} = req.body;
 
   const htmlRegex = /<\w+>/i;
